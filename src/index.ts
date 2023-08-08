@@ -11,7 +11,7 @@ interface TaskCheck {
 const list = document.querySelector<HTMLUListElement>("#list");
 const form = document.getElementById("new-task-form") as HTMLFormElement | null;
 const inputValue = document.querySelector<HTMLInputElement>("#new-task-title");
-const tasks: TaskCheck[]= loadTask();
+let tasks: TaskCheck[]= loadTask();
 tasks.forEach(addListItem);
 
 
@@ -42,6 +42,11 @@ function addListItem(task: TaskCheck){
     const item= document.createElement("li");
     const label= document.createElement("label");
     const checkbox= document.createElement("input");
+    const btn= document.createElement("button");
+
+    btn.textContent= "DELETE";
+    btn.className ="delete";
+    btn.id = task.id;
 
     checkbox.addEventListener('change', ()=>{
         task.completed = checkbox.checked;
@@ -50,10 +55,23 @@ function addListItem(task: TaskCheck){
     checkbox.type= "checkbox";
     checkbox.checked= task.completed;
 
-    label.append(checkbox, task.title);
+    label.append(checkbox, task.title, btn);
     item.appendChild(label);
     list?.appendChild(item);
 }
+
+
+list?.addEventListener('click', (e)=>{
+  e.preventDefault();
+    if(e.target == null){
+      return
+    }else{
+      const targetBtn= e.target as HTMLButtonElement;
+      if(targetBtn.classList.contains('delete')){
+        deleteTask(targetBtn);
+      }
+    }
+})
 
 
 
@@ -72,4 +90,13 @@ function loadTask():TaskCheck[]{
       return taskOBT;
     }
     
+}
+
+function deleteTask(btn: HTMLButtonElement){
+    btn.parentElement?.parentElement?.remove();
+    let newTasks= tasks.filter(item=>{
+        return item.id != btn.id
+    })
+    tasks = newTasks;
+    saveTask();
 }

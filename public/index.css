@@ -63,10 +63,17 @@ li{
 
 }
 label{
+    width: 100%;
     display: flex;
-    justify-content:start;
+    justify-content:space-between;
     align-items: center;
 }
 label input{
     margin: auto 20px;
+}
+
+label button{
+    height: 40px;
+    width: 90px;
+    background-color: red;
 }
